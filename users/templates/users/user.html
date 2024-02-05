@@ -1,0 +1,10 @@
+{% extends 'users/layout.html' %}
+
+{% block body %}
+    <h1>Welcome {{ request.user.username }}</h1>
+
+    <a href="{% url 'CalTrack:index' %}">View Calorie Tracker</a>
+    <div>
+        <a href="{% url 'logout' %}">Log Out</a>
+    </div>
+{% endblock %}

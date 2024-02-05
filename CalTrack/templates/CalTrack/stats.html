@@ -1,0 +1,36 @@
+{% extends "CalTrack/layout.html" %}
+
+{% block body %}
+
+<h1>Enter A Date and Meal Time To Find The User With The Most Calories</h1>
+
+{% if message and check %}
+    <div class="alert alert-success" role="alert">
+        {{message}}
+    </div>
+{% elif message and not check %} 
+    <div class="alert alert-danger" role="alert">
+        {{message}}
+    </div>
+{% endif %}
+
+    <div class="col-3">
+<form action="{% url 'CalTrack:statsfind' %}" method="post">
+    {% csrf_token %}
+    Date: <input id="date" class="form-control" type="date" name="date"/>
+    </div>
+        <div class="col-3">
+            Meal Time:
+            <select name="meal_time" class="form-select form-select-sm" aria-label=".form-select-sm example">
+                {% for time in meal_time %}
+                    <option value="{{time.id}}">{{time}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-outline mt-4 col-3">
+            <button type="submit" class="btn btn-dark" name="Submit">Submit</button>
+        </div>    
+    
+</form>
+
+{% endblock %}

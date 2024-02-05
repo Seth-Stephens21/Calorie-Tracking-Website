@@ -1,0 +1,105 @@
+{% extends "CalTrack/layout.html" %}
+
+{% block body %}
+
+    <h1 style="color :rgb(11, 190, 190); margin-left: 5px; margin-top: 5px; margin-bottom: 5px;"> Meals for {{consumer}}</h1>
+
+    <table class="table">
+        <thead>
+            <th>Meal ID</th>
+            <th>Date</th>
+            <th>Meal Time</th>
+            <th>Foods</th>
+            <th>Calories</th>
+            <th>Edit Meal</th>
+            <th>Delete Meal</th>
+        </thead>
+        <tbody>
+            {% for meal in meals %}
+            <tr>
+                <td>{{meal}}</td>
+                <td>{{meal.orderdate}}</td>
+                <td>{{meal.meal_time}}</td>
+                <td>
+                    <ul class="list-group">
+                        {% for object in meal.foods.all %}
+                        <li class="list-group-item list-group-item-info">{{object}}</li>
+                        {% empty %}
+                        <li>Please add a food</li>
+                        {% endfor %}
+
+                    </ul>
+                </td>
+                <td>
+                    <ul class="list-group">
+                    {% for object in meal.foods.all %}
+                    <li class="list-group-item list-group-item-secondary">{{object.calories}}</li>
+                    {% empty %}
+                    <li>&ensp;N/A&emsp;</li>
+                    {% endfor %}
+                    </ul>
+                </td>
+                <td>
+                    <form action="{% url 'CalTrack:editmealpage' meal.id %}" method="post">
+                        {% csrf_token %}
+                        
+                        <button type="submit" class="btn btn-secondary" name="Edit">Edit</button>
+                    </form>
+                </td>
+                <td>
+                    <form action="{% url 'CalTrack:deletemeal' meal.id %}" method="post">
+                        {% csrf_token %}
+                        
+                        <button type="submit" class="btn btn-dark" name="Delete">Delete</button>
+                    </form>
+                </td>
+                {% empty %}
+                <td>No Meals</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <h2>Add A Meal</h2>
+    <form action="{% url 'CalTrack:addmeal' %}" method="post">
+        {% csrf_token %}
+        <input type="date" name =date>
+        <select name="meal_time" >
+            {% for time in meal_time %}
+                <option value="{{time.id}}">{{time}}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" name="Submit">
+    </form>    
+
+
+    <h2>Add Food To A Meal</h2>
+    <form action="{% url 'CalTrack:addfood' %}" method="post">
+        {% csrf_token %}
+        <select name="meal">
+            {% for meal in meals %}
+                <option value="{{meal.id}}">{{meal}}</option>
+            {% endfor %}
+        </select>
+        <input name="type" list="types" placeholder="food_type">
+        <datalist id="types">
+            {% for type in food_type %}
+                <option value="{{type}}">
+            {% endfor %}
+        </datalist>
+        <input type="number" name="calories">
+        <input type="submit" name="Submit">
+    </form> 
+    
+
+    <h2>If Desired Food Type Is Not Listed, Please Add Below</h2>
+    <form action="{% url 'CalTrack:addfoodtype' %}" method="post">
+        {% csrf_token %}
+        <input type="text" name="Food_Type">
+        <input type="submit" name="Submit">
+    </form> 
+
+    <div>
+        <a href="{% url 'logout' %}">Log Out</a>
+    </div>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "CalTrack/layout.html" %}
+
+{% block body %}
+<h1>Edit Meal {{id}}</h1>
+
+<form action="{% url 'CalTrack:editmeal' id %}" method="post">
+    {% csrf_token %}
+    <input type="date" name =date value="{{thisdate}}">
+    <select name="meal_time">
+        {% for time in meal_time %}
+            {% if thisMealTime == time %}
+                <option value="{{time.id}}" selected="selected">{{time}}</option>
+            {% else %}
+                <option value="{{time.id}}">{{time}}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
+    {% for food in currfoods %}
+    <div style=" width: 1920px; overflow:hidden; white-space: nowrap;" >
+    Add/Edit Food 
+    <input name="{{food.id}}" list="types" value="{{food.food_type}}">  <!--previously I had a placeholder with foodtype-->
+    <datalist id="types" >
+        {% for type in food_type %}
+            <option value="{{type}}">
+        {% endfor %}
+    </datalist>
+    Calories: <input type="number" name="cal{{food.id}}" value="{{food.calories}}">
+    </div>
+    {% endfor %}
+    <div>
+    <h3>Add Additional Foods(Not Required)</h3>
+    </div>
+    {% for i in range %}
+    <div>
+     
+    Food: <input name="food{{i}}" list="types"> 
+    <datalist id="types" >
+        {% for type in food_type %}
+            <option value="{{type}}">
+        {% endfor %}
+    </datalist>
+    Calories: <input type="number" name="cal{{i}}">
+    </div>
+    {% endfor %}
+    <input type="submit" name="Submit">
+    <h3>Delete Foods</h3>
+</form>  
+{% for food in currfoods %}
+<form action="{% url 'CalTrack:deletefood' %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="foodid" value="{{food.id}}">
+    Delete {{food}} from this meal &ensp;<input type="submit" name="Delete" value="Delete">
+</form>
+{% endfor %}
+<!--
+<div>
+    <a href="{% url 'CalTrack:index' %}">Go Back</a>
+</div>
+-->
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "users/layout.html" %}
+
+{% block body %}
+    {% if message1 %}
+    <h1>{{message1}}</h1>
+    {% endif %}
+    {% if message %}
+    <h1>{{message}}</h1>
+    {% endif %}
+    <form action = "{% url 'login' %}" method = "post">
+        {% csrf_token %}
+        <div class="form-outline mb-4 mt-4 col-3">
+            <input class="form-control" type="text" placeholder="Username" name="username">
+        </div>
+        <div class="form-outline mb-4 col-3">
+            <input class="form-control" type="password" placeholder="password" name="password">
+        </div>
+        <div class="form-outline mb-4 col-3">
+            <button type="submit" class="btn btn-dark" name="Login">Login</button>
+        </div>
+        
+        
+        
+    </form>
+    
+    <h3>If New User Please Register Below</h3>
+    <a href="{% url 'registerpage' %}">Register</a>
+{% endblock %}
